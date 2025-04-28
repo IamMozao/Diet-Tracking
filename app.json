@@ -15,7 +15,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "androidForceDarkMode": false
+      },
+      "package": "com.anonymous.diettracker"
     },
     "web": {
       "bundler": "metro",

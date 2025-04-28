@@ -49,7 +49,7 @@ export default function AddDishS() {
             <MainHeader title="Add New Dish" />
 
             <ScrollView contentContainerStyle={styles.formContainer}>
-                <Text style={styles.label}>Dish Name</Text>
+                <ThemedText style={styles.label}>Dish Name</ThemedText>
                 <TextInput
                     style={styles.input}
                     value={dishName}
@@ -57,7 +57,7 @@ export default function AddDishS() {
                     placeholder="e.g. Chicken Stir Fry"
                 />
 
-                <Text style={styles.label}>Dish Type</Text>
+                <ThemedText style={styles.label}>Dish Type</ThemedText>
                 <RNPickerSelect
                     onValueChange={(value) => setSelectedMeal(value)}
                     items={[
@@ -73,7 +73,7 @@ export default function AddDishS() {
                     }}
                 />
 
-                <Text style={styles.label}>Calories</Text>
+                <ThemedText style={styles.label}>Calories</ThemedText>
                 <TextInput
                     style={styles.input}
                     value={calories}
@@ -82,7 +82,7 @@ export default function AddDishS() {
                     placeholder="e.g. 500"
                 />
 
-                <Text style={styles.label}>Ingredients</Text>
+                <ThemedText style={styles.label}>Ingredients</ThemedText>
                 {ingredients.map((ingredient, index) => (
                     <TextInput
                         key={index}
@@ -94,11 +94,11 @@ export default function AddDishS() {
                 ))}
 
                 <TouchableOpacity onPress={addIngredientField} style={styles.addButton}>
-                    <Text style={styles.addButtonText}>+ Add Ingredient</Text>
+                    <ThemedText style={styles.addButtonText}>+ Add Ingredient</ThemedText>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-                    <Text style={styles.saveButtonText}>Save Dish</Text>
+                    <ThemedText style={styles.saveButtonText}>Save Dish</ThemedText>
                 </TouchableOpacity>
             </ScrollView>
         </ThemedView>

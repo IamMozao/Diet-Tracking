@@ -6,6 +6,7 @@ import {
     TouchableWithoutFeedback,
     GestureResponderEvent,
 } from 'react-native';
+import { ThemedView } from '../ui/ThemedView';
 
 type CustomModalProps = {
     visible: boolean;
@@ -27,13 +28,13 @@ export default function CustomModal({ visible, onClose, children }: CustomModalP
             onRequestClose={onClose}
         >
             <TouchableWithoutFeedback onPress={handleOutsidePress}>
-                <View style={styles.backdrop}>
+                <ThemedView style={styles.backdrop}>
                     <TouchableWithoutFeedback>
-                        <View style={styles.modalContent}>
+                        <ThemedView style={styles.modalContent}>
                             {children}
-                        </View>
+                        </ThemedView>
                     </TouchableWithoutFeedback>
-                </View>
+                </ThemedView>
             </TouchableWithoutFeedback>
         </Modal>
     );

@@ -6,9 +6,10 @@ import { MealOptions } from "@/dto/meals.dto";
 import { Weekdays } from "@/dto/week.dto";
 import { capitalize } from "@/helpers/general";
 import useWeekStore from "@/store/week-store";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Collapsible from 'react-native-collapsible';
+import { ThemeType, useTheme } from "react-native-magnus";
 
 
 const screenHeight = Dimensions.get('window').height;
@@ -18,16 +19,18 @@ type WeekdayProps = {
 };
 
 export default function WeekPlan() {
+    const { theme } = useTheme();
+    const styles = useMemo(() => makeStyles(theme), [theme]);
 
     const [expandedDays, setExpandedDays] = useState<Partial<Record<Weekdays, boolean>>>({});
 
-    const toggleCollapse = (day: Weekdays) => {        
-      setExpandedDays((prev) => ({
-        ...prev,
-        [day]: !prev[day]
-      }));
+    const toggleCollapse = (day: Weekdays) => {
+        setExpandedDays((prev) => ({
+            ...prev,
+            [day]: !prev[day]
+        }));
     };
-  
+
 
     const week = useWeekStore((state) => state.week);
 
@@ -39,25 +42,25 @@ export default function WeekPlan() {
             <MainHeader title='Week Plan' />
             <ScrollView contentContainerStyle={styles.bodyWrapper}>
                 {weekdays.map(day => (
-                    <View style={styles.container}>
-                    <TouchableOpacity onPress={() => toggleCollapse(day)} style={styles.button}>
-                        <Text style={styles.buttonText}>{capitalize(day)}</Text>
-                    </TouchableOpacity>
-    
-                    <Collapsible collapsed={!expandedDays[day]}>
-                        <DishView dish={week[day].breakfast} weekday={day} meal={MealOptions.breakfast}></DishView>
-                        <DishView dish={week[day].lunch} weekday={day} meal={MealOptions.lunch}></DishView>
-                        <DishView dish={week[day].snack} weekday={day} meal={MealOptions.snack}></DishView>
-                        <DishView dish={week[day].dinner} weekday={day} meal={MealOptions.dinner}></DishView>
-                    </Collapsible>
-                </View>
+                    <ThemedView style={styles.container}>
+                        <TouchableOpacity onPress={() => toggleCollapse(day)} style={styles.button}>
+                            <ThemedText style={styles.buttonText}>{capitalize(day)}</ThemedText>
+                        </TouchableOpacity>
+
+                        <Collapsible collapsed={!expandedDays[day]}>
+                            <DishView dish={week[day].breakfast} weekday={day} meal={MealOptions.breakfast}></DishView>
+                            <DishView dish={week[day].lunch} weekday={day} meal={MealOptions.lunch}></DishView>
+                            <DishView dish={week[day].snack} weekday={day} meal={MealOptions.snack}></DishView>
+                            <DishView dish={week[day].dinner} weekday={day} meal={MealOptions.dinner}></DishView>
+                        </Collapsible>
+                    </ThemedView>
                 ))}
             </ScrollView>
         </ThemedView>
     );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (theme: ThemeType) => StyleSheet.create({
     bodyWrapper: {
         paddingVertical: 20,
         paddingHorizontal: 10,
@@ -66,16 +69,20 @@ const styles = StyleSheet.create({
     },
     container: {
         paddingVertical: 5,
+        backgroundColor: theme.palette.textOnPrimary,
+        marginBottom: 10,
+        borderRadius:15,
+        padding:10
 
     },
     button: {
-        backgroundColor: '#4CAF50',
         padding: 10,
         borderRadius: 5,
-        marginBottom: 10,
     },
     buttonText: {
-        color: '#fff',
+        color: theme.colors!.gray900,
         fontSize: 16,
+        fontFamily: 'LatoBlack'
     }
 });
+

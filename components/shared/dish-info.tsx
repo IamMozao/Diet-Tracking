@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ThemedView } from "../ui/ThemedView";
-import { Button, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, TouchableOpacity } from "react-native";
 import { DishInfo, MealOptions } from "@/dto/meals.dto";
 import { IconSymbol } from "../ui/IconSymbol";
 import { Weekdays } from "@/dto/week.dto";
@@ -10,6 +10,7 @@ import useMealStore from "@/store/meal-store";
 import useWeekStore from "@/store/week-store";
 import { ThemedText } from "../ui/ThemedText";
 import { FlatList } from "react-native-gesture-handler";
+import { Text, ThemeType, useTheme } from "react-native-magnus";
 
 
 type DishViewProps = {
@@ -19,6 +20,9 @@ type DishViewProps = {
 };
 
 export default function DishView({ dish, weekday, meal }: DishViewProps) {
+    const { theme } = useTheme();
+    const styles = useMemo(() => makeStyles(theme), [theme]);
+
 
     const meals = useMealStore((state) => state.allMeals);
 
@@ -33,11 +37,11 @@ export default function DishView({ dish, weekday, meal }: DishViewProps) {
 
     const DishDetails = () => (
         <ThemedView style={styles.dishInfo}>
-            <Text style={styles.mealName}>{dish.name}</Text>
+            <ThemedText style={styles.mealName}>{dish.name}</ThemedText>
             <ThemedView style={styles.ingredientsWrapper}>
                 {
                     dish.ingredients.map(ingredient => (
-                        <Text style={styles.mealIngredients}>{ingredient}</Text>
+                        <ThemedText style={styles.mealIngredients}>{ingredient}</ThemedText>
                     ))
                 }
             </ThemedView>
@@ -64,50 +68,56 @@ export default function DishView({ dish, weekday, meal }: DishViewProps) {
 
             <CustomModal visible={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <FlatList
-                            data={meals[meal!]}
-                            keyExtractor={(item, index) => index.toString()}
-                            contentContainerStyle={styles.listContainer}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity onPress={()=> handleDishSelection(item)}>
-                                    <DishView dish={item}></DishView>
-                                </TouchableOpacity>
-                            )}
-                        />
+                    data={meals[meal!]}
+                    keyExtractor={(item, index) => index.toString()}
+                    contentContainerStyle={styles.listContainer}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => handleDishSelection(item)}>
+                            <DishView dish={item}></DishView>
+                        </TouchableOpacity>
+                    )}
+                />
             </CustomModal>
         </ThemedView>
     )
 }
 
-const styles = StyleSheet.create({
-    dishView: {
-        backgroundColor: '#ccc',
-        width: '100%',
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    mealName: { fontSize: 21, backgroundColor: '#ccc', },
-    ingredientsWrapper: {
-        includeFontPadding: false,
-        backgroundColor: '#ccc',
-        flexDirection: 'row',
-    },
-    mealIngredients: {
-        marginRight: 5,
-        includeFontPadding: false
-    },
-    dishInfo: {
-    },
-    editDish: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ccc',
-        paddingHorizontal: 10
-    },
-    listContainer: {
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-    },
-});
+const makeStyles = (theme: ThemeType) => {
+    const bgColor = theme.palette.textOnPrimary;
+    
+    return StyleSheet.create({
+        dishView: {
+            width: '100%',
+            marginBottom: 0,
+            paddingHorizontal: 10,
+            paddingTop:10,
+            paddingBottom:10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: bgColor,
+            borderBottomColor: theme.colors!.gray600,
+            borderBottomWidth:1
+        },
+        mealName: { fontSize: 21,backgroundColor: bgColor,},
+        ingredientsWrapper: {
+            includeFontPadding: false,
+            flexDirection: 'row',
+            backgroundColor: bgColor,
+        },
+        mealIngredients: {
+            marginRight: 5,
+            includeFontPadding: false,
+        },
+        dishInfo: {
+        },
+        editDish: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: 10
+        },
+        listContainer: {
+            paddingVertical: 20,
+            paddingHorizontal: 10,
+        },
+    })
+};

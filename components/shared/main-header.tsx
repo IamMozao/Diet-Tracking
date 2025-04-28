@@ -1,7 +1,8 @@
-import { ThemedView } from "@/components/ui/ThemedView";
-import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import React, { useMemo } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ui/ThemedText";
+import { useTheme, ThemeType } from "react-native-magnus";
+import { ThemedView } from "../ui/ThemedView";
 
 const { height } = Dimensions.get('window');
 
@@ -9,30 +10,39 @@ interface HeaderProps {
     title: string;
 }
 
-const MainHeader = ({ title }: HeaderProps) => { 
 
+const MainHeader = ({ title }: HeaderProps) => { 
+    const {theme} = useTheme();
+    const styles = useMemo(() => makeStyles(theme), [theme]);
     return (
-        <View style={styles.header}>
-            <View style={styles.headerWrapper}>
-                <Text style={styles.title}>{title}</Text>
-            </View>
-        </View>
+        <ThemedView style={styles.header}>
+            <ThemedView style={styles.headerWrapper}>
+                <ThemedText fontSize='6xl' style={styles.title}>{title}</ThemedText>
+            </ThemedView>
+        </ThemedView>
     );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (theme: ThemeType) => StyleSheet.create({
     header: {
         height: height * 0.2,
-        backgroundColor: 'red'
+        
     },
     headerWrapper: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-end'
+        flexDirection: 'column', 
+        justifyContent: 'flex-end',
+        backgroundColor: theme.palette.primary[500] 
     },
     title: {
-        fontSize:36
+        fontFamily: 'SpecialGothic',
+        color: '#FFF8D6',
+        marginLeft: 15,
+        marginBottom:5,
+        fontSize:55
     }
-});
+ })
+
+
 
 export default MainHeader;

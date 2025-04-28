@@ -59,7 +59,6 @@ export default function Meals() {
                             onPress={() => switchActiveTab(tab)}
                         >
                             <Text
-                                type="defaultSemiBold"
                                 style={[
                                     styles.tabText,
                                     activeTab == tab && styles.activeTabText
@@ -136,12 +135,10 @@ const styles = StyleSheet.create({
     mealsWrapper: {
         justifyContent: 'center', // centers vertically
         alignItems: 'center',     // centers horizontally
-        backgroundColor: '#fff',
         flexDirection: 'column',
 
     },
     mealView: {
-        backgroundColor: '#ddd',
         width: '90%',
         marginBottom: 10,
         paddingHorizontal: 10,
@@ -150,7 +147,6 @@ const styles = StyleSheet.create({
     mealName: { fontSize: 21 },
     ingredientsWrapper: {
         flexDirection: 'row',
-        backgroundColor: '#ddd'
     },
     mealIngredients: {
         marginRight: 5
